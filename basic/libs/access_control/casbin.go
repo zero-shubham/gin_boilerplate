@@ -2,6 +2,7 @@ package accesscontrol
 
 import (
 	"fmt"
+	"sync"
 
 	casbin "github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
@@ -9,23 +10,27 @@ import (
 )
 
 var enforcer *casbin.Enforcer
+var once sync.Once
 
 func SetupCasbin(db *gorm.DB) error {
+	var err error
 
-	adp, err := gormadapter.NewAdapterByDB(db)
-	if err != nil {
-		return err
-	}
-	enfcr, err := casbin.NewEnforcer("public/rbac_model.conf", adp)
-	if err != nil {
-		return err
-	}
+	once.Do(func() {
+		adp, err := gormadapter.NewAdapterByDB(db)
+		if err != nil {
+			return
+		}
+		enfcr, err := casbin.NewEnforcer("public/rbac_model.conf", adp)
+		if err != nil {
+			return
+		}
 
-	if enforcer == nil {
-		enforcer = enfcr
-	}
-	enforcer.LoadPolicy()
-	return nil
+		if enforcer == nil {
+			enforcer = enfcr
+		}
+	})
+
+	return err
 }
 
 func GetEnforcer() (*casbin.Enforcer, error) {

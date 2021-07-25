@@ -3,20 +3,26 @@ package core
 import (
 	models "basic/core/models"
 	"fmt"
+	"sync"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
+var once sync.Once
 
 func InitDB(cfg postgres.Config) error {
-	_db, err := gorm.Open(
-		postgres.New(cfg),
-	)
-	if err == nil && db == nil {
-		db = _db
-	}
+	var err error
+	once.Do(func() {
+		_db, err := gorm.Open(
+			postgres.New(cfg),
+		)
+		if err == nil && db == nil {
+			db = _db
+		}
+	})
+
 	return err
 }
 

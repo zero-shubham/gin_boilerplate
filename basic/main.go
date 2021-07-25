@@ -34,7 +34,7 @@ func main() {
 
 	db, err := core.GetDB()
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 	} else {
 		err = accesscontrol.SetupCasbin(db)
 		if err != nil {
