@@ -32,9 +32,14 @@ func main() {
 		fmt.Println(fmt.Errorf("error initiating database: %s", err))
 	}
 
-	err = accesscontrol.SetupCasbin(core.DB)
+	db, err := core.GetDB()
 	if err != nil {
-		fmt.Println(fmt.Errorf("error initiating casbin: %s", err))
+		fmt.Print(err)
+	} else {
+		err = accesscontrol.SetupCasbin(db)
+		if err != nil {
+			fmt.Println(fmt.Errorf("error initiating casbin: %s", err))
+		}
 	}
 	// core.Migrate(core.DB)
 

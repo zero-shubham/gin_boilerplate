@@ -2,19 +2,20 @@ package core
 
 import (
 	models "basic/core/models"
+	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 
 func InitDB(cfg postgres.Config) error {
-	db, err := gorm.Open(
+	_db, err := gorm.Open(
 		postgres.New(cfg),
 	)
-	if err == nil {
-		DB = db
+	if err == nil && db == nil {
+		db = _db
 	}
 	return err
 }
@@ -22,4 +23,11 @@ func InitDB(cfg postgres.Config) error {
 func Migrate(db *gorm.DB) error {
 	err := db.AutoMigrate(&models.User{})
 	return err
+}
+
+func GetDB() (*gorm.DB, error) {
+	if db == nil {
+		return nil, fmt.Errorf("DB not instantiated")
+	}
+	return db, nil
 }

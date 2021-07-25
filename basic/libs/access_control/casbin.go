@@ -1,12 +1,14 @@
 package accesscontrol
 
 import (
+	"fmt"
+
 	casbin "github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
 )
 
-var Enforcer casbin.Enforcer
+var enforcer *casbin.Enforcer
 
 func SetupCasbin(db *gorm.DB) error {
 
@@ -18,7 +20,17 @@ func SetupCasbin(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-	Enforcer = *enfcr
-	Enforcer.LoadPolicy()
+
+	if enforcer == nil {
+		enforcer = enfcr
+	}
+	enforcer.LoadPolicy()
 	return nil
+}
+
+func GetEnforcer() (*casbin.Enforcer, error) {
+	if enforcer == nil {
+		return nil, fmt.Errorf("enforcer not instantiated")
+	}
+	return enforcer, nil
 }
