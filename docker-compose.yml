@@ -1,0 +1,32 @@
+version: '3.2'
+
+services:
+  postgres-service:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=zero
+      - POSTGRES_PASSWORD=zero0000
+      - POSTGRES_DB=basic
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+  gin-basic-app:
+    image: basic-gin
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - '8081:8081'
+    restart: always
+    volumes:
+      - app-vol:/root
+      - type: bind
+        source: './basic'
+        target: '/home/basic'
+    depends_on:
+      - postgres-service
+volumes:
+  postgres-db:
+  app-vol:
