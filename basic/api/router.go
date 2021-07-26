@@ -18,6 +18,8 @@ func NewRouter(apiVrsn string) (*Router, error) {
 	v1 := r.engine.Group(apiVrsn)
 
 	apiv1.AddIndex(v1)
+	apiv1.AddRoles(v1)
+	apiv1.AddUsers(v1)
 	return &r, nil
 }
 

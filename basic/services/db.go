@@ -1,4 +1,4 @@
-package core
+package services
 
 import (
 	models "basic/core/models"

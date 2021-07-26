@@ -3,8 +3,8 @@ package main
 import (
 	"basic/api"
 	"basic/config"
-	"basic/core"
 	accesscontrol "basic/libs/access_control"
+	"basic/services"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -23,7 +23,7 @@ func main() {
 		fmt.Println(fmt.Errorf("error initiating router: %s", err))
 	}
 
-	err = core.InitDB(
+	err = services.InitDB(
 		postgres.Config{
 			DSN: cfg.DbUri,
 		},
@@ -32,7 +32,7 @@ func main() {
 		fmt.Println(fmt.Errorf("error initiating database: %s", err))
 	}
 
-	db, err := core.GetDB()
+	db, err := services.GetDB()
 	if err != nil {
 		fmt.Println(err)
 	} else {

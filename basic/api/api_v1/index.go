@@ -7,11 +7,11 @@ import (
 func AddIndex(rg *gin.RouterGroup) {
 	index := rg.Group("/index")
 
-	index.GET("/", getIndex)
+	index.GET("/", getIndexHandler)
 
 }
 
-func getIndex(c *gin.Context) {
+func getIndexHandler(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"data": "Hello World!",
 	})
