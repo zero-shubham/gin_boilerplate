@@ -7,11 +7,13 @@ import (
 	"basic/services"
 	"time"
 
+	accesscontrol "basic/libs/access_control"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
-func CreateUser(objIn *schemas.CreateUser) (*schemas.User, *gin.Error) {
+func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.Error) {
 	// * get db
 	db, err := services.GetDB()
 	if err != nil {
@@ -63,6 +65,17 @@ func CreateUser(objIn *schemas.CreateUser) (*schemas.User, *gin.Error) {
 			Meta: "error creating User record",
 		}
 	}
+
+	// * add role to user
+	enfcr, err := accesscontrol.GetEnforcer()
+	if err != nil {
+		return &schemas.User{}, &gin.Error{
+			Err:  err,
+			Type: 500,
+			Meta: "Something went internally.",
+		}
+	}
+	enfcr.AddRolesForUser(user.ID.String(), roles)
 
 	return &schemas.User{
 		ID:        user.ID,

@@ -15,3 +15,12 @@ down:
 
 new:
 	migrate create -ext sql -dir migrations -seq ${filename}
+
+# Generate cli
+.PHONY: cli
+cli:
+	go build -o cmd cli/main.go
+
+.PHONY: database
+start:
+	docker-compose up postgres-service

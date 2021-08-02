@@ -25,7 +25,7 @@ func createUserHandler(c *gin.Context) {
 		return
 	}
 
-	user, controllerErr := controllers.CreateUser(&objIn)
+	user, controllerErr := controllers.CreateUser(&objIn, []string{"user"})
 	if controllerErr != nil {
 		c.JSON(
 			int(controllerErr.Type), gin.H{

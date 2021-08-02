@@ -31,6 +31,22 @@ func LoadConfig() (*Config, error) {
 	return config, nil
 }
 
+func LoadCliConfig() (*Config, error) {
+	err := godotenv.Load(".clienv")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+		return nil, err
+	}
+	if config == nil {
+		config = &Config{
+			DbUri:      os.Getenv("DB_URI"),
+			ServerPort: os.Getenv("SERVER_PORT"),
+			SigningKey: os.Getenv("SIGNING_KEY"),
+		}
+	}
+	return config, nil
+}
+
 func GetConfig() *Config {
 	if config == nil {
 		return nil
