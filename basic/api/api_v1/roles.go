@@ -2,8 +2,8 @@ package apiv1
 
 import (
 	"basic/core/schemas"
-	accesscontrol "basic/libs/access_control"
 	"basic/libs/middlewares"
+	"basic/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +16,7 @@ func AddRoles(rg *gin.RouterGroup) {
 }
 
 func getRolesHandler(c *gin.Context, token *schemas.TokenClaims) {
-	enfcr, err := accesscontrol.GetEnforcer()
+	enfcr, err := services.GetEnforcer()
 	if err != nil {
 		c.JSON(
 			500,

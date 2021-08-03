@@ -34,3 +34,15 @@ func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 	}
 	return user, nil
 }
+
+func GetUserById(db *gorm.DB, id uuid.UUID) (*User, error) {
+	var user *User
+	result := db.Where(&User{ID: id}).First(&user)
+	if result.Error == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
+}

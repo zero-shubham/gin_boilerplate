@@ -10,11 +10,11 @@ import (
 )
 
 var db *gorm.DB
-var once sync.Once
+var dbOnce sync.Once
 
 func InitDB(cfg postgres.Config) error {
 	var err error
-	once.Do(func() {
+	dbOnce.Do(func() {
 		_db, err := gorm.Open(
 			postgres.New(cfg),
 		)

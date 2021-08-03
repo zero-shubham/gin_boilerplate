@@ -3,7 +3,6 @@ package main
 import (
 	"basic/api"
 	"basic/config"
-	accesscontrol "basic/libs/access_control"
 	"basic/services"
 	"fmt"
 
@@ -36,7 +35,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		err = accesscontrol.SetupCasbin(db)
+		err = services.SetupCasbin(db)
 		if err != nil {
 			fmt.Println(fmt.Errorf("error initiating casbin: %s", err))
 		}

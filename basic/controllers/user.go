@@ -5,9 +5,8 @@ import (
 	"basic/core/schemas"
 	"basic/libs/hashing"
 	"basic/services"
+	"net/http"
 	"time"
-
-	accesscontrol "basic/libs/access_control"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -19,7 +18,7 @@ func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.
 	if err != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 500,
+			Type: http.StatusInternalServerError,
 			Meta: "error getting DB conn",
 		}
 	}
@@ -29,14 +28,14 @@ func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.
 	if err != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 500,
+			Type: http.StatusInternalServerError,
 			Meta: "error retrieving User record",
 		}
 	}
 	if user != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 409,
+			Type: http.StatusConflict,
 			Meta: "User record exists with specified username",
 		}
 	}
@@ -46,7 +45,7 @@ func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.
 	if err != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 500,
+			Type: http.StatusInternalServerError,
 			Meta: "error while hashing",
 		}
 	}
@@ -61,17 +60,17 @@ func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.
 	if err != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 500,
+			Type: http.StatusInternalServerError,
 			Meta: "error creating User record",
 		}
 	}
 
 	// * add role to user
-	enfcr, err := accesscontrol.GetEnforcer()
+	enfcr, err := services.GetEnforcer()
 	if err != nil {
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
-			Type: 500,
+			Type: http.StatusInternalServerError,
 			Meta: "Something went internally.",
 		}
 	}
