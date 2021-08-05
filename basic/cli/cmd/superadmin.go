@@ -22,7 +22,7 @@ func createSuperadminCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(args) < 2 {
-				fmt.Errorf("not enough arguments, username and password required")
+				fmt.Printf("not enough arguments, username and password required")
 			}
 			user, err := controllers.CreateUser(
 				&schemas.CreateUser{
@@ -32,7 +32,7 @@ func createSuperadminCmd() *cobra.Command {
 				[]string{"root"},
 			)
 			if err != nil {
-				fmt.Errorf("something went wrong creating user: %v", err.Err)
+				fmt.Printf("something went wrong creating user: %v", err.Err)
 			}
 
 			fmt.Printf("user added with details: %v", user)

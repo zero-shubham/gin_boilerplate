@@ -22,7 +22,7 @@ func main() {
 
 	cfg, err := config.LoadCliConfig()
 	if err != nil {
-		fmt.Println(fmt.Errorf("error initiating router: %s", err))
+		fmt.Println(fmt.Errorf("error initiating config: %s", err))
 	}
 
 	err = services.InitDB(
@@ -45,6 +45,7 @@ func main() {
 	}
 
 	cmd.InitSuperadminCommands(rootCmd)
+	cmd.InitPolicyCommands(rootCmd)
 
 	cobra.CheckErr(rootCmd.Execute())
 

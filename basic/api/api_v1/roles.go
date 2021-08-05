@@ -11,11 +11,11 @@ import (
 func AddRoles(rg *gin.RouterGroup) {
 	roles := rg.Group("/roles")
 
-	roles.GET("/", middlewares.WithValidToken(getRolesHandler))
+	roles.GET("/", middlewares.UserHasPermission(getRolesHandler, "roles", "read"))
 
 }
 
-func getRolesHandler(c *gin.Context, token *schemas.TokenClaims) {
+func getRolesHandler(c *gin.Context, user *schemas.UserWithRoles) {
 	enfcr, err := services.GetEnforcer()
 	if err != nil {
 		c.JSON(
@@ -31,18 +31,3 @@ func getRolesHandler(c *gin.Context, token *schemas.TokenClaims) {
 		"roles": enfcr.GetAllRoles(),
 	})
 }
-
-// func addRoles(c *gin.Context) {
-// 	enfcr, err := accesscontrol.GetEnforcer()
-// 	if err != nil {
-// 		c.JSON(
-// 			500,
-// 			gin.H{
-// 				"message": "Something went internally.",
-// 			},
-// 		)
-// 		return
-// 	}
-
-// 	enfcr.AddRoleForUser()
-// }

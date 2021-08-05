@@ -4,6 +4,7 @@ import (
 	"basic/core/models"
 	"basic/core/schemas"
 	basicjwt "basic/libs/basic_jwt"
+	"basic/libs/utils"
 	"basic/services"
 	"net/http"
 	"strings"
@@ -108,5 +109,43 @@ func WithAuthUser(hf schemas.HandlerFuncWithAuthUser) gin.HandlerFunc {
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		})
+	})
+}
+
+func UserHasPermission(hf schemas.HandlerFuncWithAuthUser, obj string, act string) gin.HandlerFunc {
+	return WithAuthUser(func(c *gin.Context, u *schemas.UserWithRoles) {
+		enfcr, err := services.GetEnforcer()
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				gin.H{
+					"message": "Something went internally.",
+				},
+			)
+			return
+		}
+
+		ok, err := enfcr.Enforce(u.ID.String(), obj, act)
+		if err != nil {
+			c.JSON(
+				http.StatusInternalServerError,
+				gin.H{
+					"message": "Something went internally.",
+				},
+			)
+			return
+		}
+
+		if !ok && !utils.StringInSlice("root", u.Roles) {
+			c.JSON(
+				http.StatusForbidden,
+				gin.H{
+					"message": "Not permitted.",
+				},
+			)
+			return
+		}
+
+		hf(c, u)
 	})
 }
