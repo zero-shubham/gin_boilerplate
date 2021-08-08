@@ -62,7 +62,7 @@ func getUserRolesHandler(c *gin.Context, user *schemas.UserWithRoles) {
 		c.JSON(
 			http.StatusInternalServerError,
 			gin.H{
-				"message": "Something went internally.",
+				"message": "Something went wrong internally.",
 			},
 		)
 		return
@@ -73,7 +73,7 @@ func getUserRolesHandler(c *gin.Context, user *schemas.UserWithRoles) {
 		c.JSON(
 			http.StatusInternalServerError,
 			gin.H{
-				"message": "Something went internally.",
+				"message": "Something went wrong internally.",
 			},
 		)
 		return

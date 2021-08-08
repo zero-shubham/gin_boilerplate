@@ -21,7 +21,7 @@ func getRolesHandler(c *gin.Context, user *schemas.UserWithRoles) {
 		c.JSON(
 			500,
 			gin.H{
-				"message": "Something went internally.",
+				"message": "Something went wrong internally.",
 			},
 		)
 		return

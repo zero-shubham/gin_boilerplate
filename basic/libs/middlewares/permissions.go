@@ -66,7 +66,7 @@ func WithAuthUser(hf schemas.HandlerFuncWithAuthUser) gin.HandlerFunc {
 			c.JSON(
 				http.StatusInternalServerError,
 				gin.H{
-					"message": "Something went internally.",
+					"message": "Something went wrong internally.",
 				},
 			)
 			return
@@ -86,7 +86,7 @@ func WithAuthUser(hf schemas.HandlerFuncWithAuthUser) gin.HandlerFunc {
 			c.JSON(
 				http.StatusInternalServerError,
 				gin.H{
-					"message": "Something went internally.",
+					"message": "Something went wrong internally.",
 				},
 			)
 			return
@@ -96,7 +96,7 @@ func WithAuthUser(hf schemas.HandlerFuncWithAuthUser) gin.HandlerFunc {
 			c.JSON(
 				http.StatusInternalServerError,
 				gin.H{
-					"message": "Something went internally.",
+					"message": "Something went wrong internally.",
 				},
 			)
 			return
@@ -119,7 +119,7 @@ func UserHasPermission(hf schemas.HandlerFuncWithAuthUser, obj string, act strin
 			c.JSON(
 				http.StatusInternalServerError,
 				gin.H{
-					"message": "Something went internally.",
+					"message": "Something went wrong internally.",
 				},
 			)
 			return
@@ -130,7 +130,7 @@ func UserHasPermission(hf schemas.HandlerFuncWithAuthUser, obj string, act strin
 			c.JSON(
 				http.StatusInternalServerError,
 				gin.H{
-					"message": "Something went internally.",
+					"message": "Something went wrong internally.",
 				},
 			)
 			return

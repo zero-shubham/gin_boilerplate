@@ -71,7 +71,7 @@ func CreateUser(objIn *schemas.CreateUser, roles []string) (*schemas.User, *gin.
 		return &schemas.User{}, &gin.Error{
 			Err:  err,
 			Type: http.StatusInternalServerError,
-			Meta: "Something went internally.",
+			Meta: "Something went wrong internally.",
 		}
 	}
 	enfcr.AddRolesForUser(user.ID.String(), roles)
